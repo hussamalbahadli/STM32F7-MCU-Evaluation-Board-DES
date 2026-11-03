@@ -1,82 +1,90 @@
 # STM32F7-MCU-Evaluation-Board-DES
 
-درايفرات مكتوبة من الصفر للـ **STM32F746ZG** على بورد **NUCLEO-F746ZG**، بنفس المعمارية والتسميات مالتي بالـ AVR والـ F103.
+Bare-metal drivers written from scratch for the **STM32F746ZG** on a **NUCLEO-F746ZG** board, following the same layered architecture and naming conventions I use in my AVR and STM32F103 repositories.
 
-> هذا مستودع **تدريب شخصي**. كل درايفر أكتبه بيدي من الـ Reference Manual (RM0385)، مو كوبي من HAL.
+> Personal training repository. Every driver is written by hand from the Reference Manual (RM0385) — no HAL, no CubeMX-generated code.
 
 ---
 
-## المعمارية
+## Architecture
 
 ```
 Driver/
- ├── LIB/            أنواع وماكروات عامة — ما تتغير بين المتحكمات
- ├── MCAL/           طبقة الهاردويير: تلمس الريجسترات مباشرة
+ ├── LIB/            Generic types and macros — identical across MCUs
+ ├── MCAL/           Hardware layer: touches registers directly
  │    ├── RCC/
  │    ├── GPIO/
  │    └── STK/
- ├── HAL/            طبقة أعلى: تستخدم MCAL، ما تعرف ريجسترات
- └── SERVICES/       خدمات عامة (سكيدولر، فلاتر...)
+ ├── HAL/            Higher layer: uses MCAL, knows no registers
+ └── SERVICES/       Generic services (scheduler, filters, ...)
 ```
 
-كل درايفر = **4 ملفات**:
+Every driver consists of **four files**:
 
-| الملف | شغلته |
+| File | Role |
 |---|---|
-| `X_interface.h` | العقد — شنو يكدر المستخدم يسوي |
-| `X_private.h` | عناوين الريجسترات والبتات |
-| `X_config.h` | الخيارات — المستخدم يعدّلها |
-| `X_program.c` | التنفيذ |
+| `X_interface.h` | The contract — what the user is allowed to do |
+| `X_private.h` | Register addresses and bit positions |
+| `X_config.h` | Build-time options the user edits |
+| `X_program.c` | Implementation |
 
-### التسميات
-- بارامترات الدوال: `Copy_u8...`
-- المتغيرات المحلية: `Local_u8...`
-- الدوال: `MODULE_voidName` / `MODULE_u8Name`
+### Naming conventions
+- Function parameters: `Copy_u8...`
+- Local variables: `Local_u8...`
+- Functions: `MODULE_voidName` / `MODULE_u8Name`
 
 ---
 
-## الحالة
+## Status
 
-| الدرايفر | الحالة |
+| Driver | Status |
 |---|---|
-| LIB | ✅ |
-| RCC | ⬜ |
-| GPIO | ⬜ |
-| STK | ⬜ |
+| LIB | Done |
+| RCC | Not started |
+| GPIO | Not started |
+| STK | Not started |
 
 ---
 
-## الفرق الجذري عن الـ F103
+## Why the F103 GPIO driver cannot be reused
 
-الـ GPIO مال F103 **ما يشتغل أبداً** هنا. مو تعديل بسيط — ريجسترات مختلفة كلياً:
+The STM32F103 GPIO driver **will not work here at all**. This is not a small patch — the register model is completely different:
 
 | F103 (Cortex-M3) | F746 (Cortex-M7) |
 |---|---|
-| `CRL` / `CRH` — 4 بت للبن | `MODER` — 2 بت للبن |
-| الـ 4 بت تحمل الوضع + النوع + السرعة | انفصلوا: `MODER` + `OTYPER` + `OSPEEDR` + `PUPDR` |
-| `APB2ENR` للـ GPIO | `AHB1ENR` للـ GPIO |
+| `CRL` / `CRH` — 4 bits per pin | `MODER` — 2 bits per pin |
+| Those 4 bits encode mode + type + speed together | Split into `MODER` + `OTYPER` + `OSPEEDR` + `PUPDR` |
+| GPIO clock on `APB2ENR` | GPIO clock on `AHB1ENR` |
 
-**بس `GPIO_interface.h` يبقى نفسه حرف بحرف** — هذا بيت القصيد مال المعمارية الطبقية: `Example/01_GPIO_Blink/main.c` يشتغل على الاثنين بدون أي تغيير.
+**But `GPIO_interface.h` stays byte-for-byte identical.** That is the entire point of the layered architecture: `Example/01_GPIO_Blink/main.c` compiles and runs unchanged on both MCUs.
 
 ---
 
-## البورد — أرقام سريعة
+## Board quick reference
 
-| الشي | البن |
+| Signal | Pin |
 |---|---|
-| LD1 أخضر | PB0 |
-| LD2 أزرق | PB7 |
-| LD3 أحمر | PB14 |
-| زر User | PC13 |
-| VCP (طرفية سيريال عبر ST-LINK) | USART3 — PD8 / PD9 |
+| LD1 (green) | PB0 |
+| LD2 (blue) | PB7 |
+| LD3 (red) | PB14 |
+| User button | PC13 |
+| ST-LINK VCP (serial over USB) | USART3 — PD8 / PD9 |
 
-HSI = 16 MHz · HSE من ST-LINK = 8 MHz · أقصى تردد = 216 MHz
+HSI = 16 MHz · HSE from ST-LINK MCO = 8 MHz · Max core clock = 216 MHz
 
 ---
 
-## المراجع
+## Build
 
-- RM0385 — Reference Manual (STM32F74x/75x)
-- DS10916 — Datasheet (STM32F746ZG)
-- UM1974 — دليل بورد Nucleo-144
-- PM0253 — Cortex-M7 Programming Manual
+Keil MDK-ARM (uVision 5). Add `Driver/LIB`, `Driver/MCAL/*` and the example folder to the include paths. Flash over the on-board ST-LINK.
+
+`Example/01_GPIO_Blink/main.c` is the acceptance test — it is never modified. Write `RCC` and `GPIO` until it runs as-is.
+
+---
+
+## References
+
+- **RM0385** — Reference Manual (STM32F74x/75x)
+- **DS10916** — Datasheet (STM32F746ZG)
+- **UM1974** — Nucleo-144 board user manual
+- **PM0253** — Cortex-M7 Programming Manual
