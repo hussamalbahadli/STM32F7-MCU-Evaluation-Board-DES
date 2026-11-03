@@ -1,0 +1,50 @@
+# ==========================================================
+#  Keil MDK-ARM  —  build outputs. Never commit these.
+# ==========================================================
+Objects/
+Listings/
+DebugConfig/
+RTE/
+*.uvguix.*
+*.uvoptx
+*.bak
+*.sct
+*.scvd
+*.dep
+*.lnp
+*.build_log.htm
+*.htm
+
+# Intermediate files
+*.o
+*.d
+*.crf
+*.i
+*.lst
+
+# Final outputs (built from source — no point saving them)
+*.axf
+*.elf
+*.hex
+*.bin
+*.map
+*.srec
+*.eep
+*.lss
+
+# Tools
+JLinkLog.txt
+*.jdebug*
+.vs/
+.vscode/
+*.swp
+*~
+Thumbs.db
+.DS_Store
+
+# ==========================================================
+#  What is actually tracked:
+#     *.uvprojx     project file
+#     *.c  *.h      source
+#     *.md          documentation
+# ==========================================================
