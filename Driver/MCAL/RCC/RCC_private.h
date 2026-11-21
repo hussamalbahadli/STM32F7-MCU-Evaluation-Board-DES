@@ -8,10 +8,10 @@
 #ifndef RCC_PRIVATE_H
 #define RCC_PRIVATE_H
 
-/*------------------ Base Address ------------------*/
+/*------------------ 01. Base Address ------------------*/
 #define RCC_BASE_ADDRESS 0x40023800UL
 
-/*------------------ Register Definitions --------------*/
+/*------------------ 02. Register Definitions ------------------*/
 #define RCC_CR      (*(volatile u32 *)(RCC_BASE_ADDRESS + 0x00))
 #define RCC_CFGR    (*(volatile u32 *)(RCC_BASE_ADDRESS + 0x08))
 #define RCC_AHB1ENR (*(volatile u32 *)(RCC_BASE_ADDRESS + 0x30))
@@ -19,14 +19,24 @@
 #define RCC_APB1ENR (*(volatile u32 *)(RCC_BASE_ADDRESS + 0x40))
 #define RCC_APB2ENR (*(volatile u32 *)(RCC_BASE_ADDRESS + 0x44))
 
-/*------------------ Register RCC_CR Bit ------------------*/
+/*------------------ 03. RCC_CR Bits ------------------*/
 #define RCC_CR_HSION  0
 #define RCC_CR_HSIRDY 1
 
-/*------------------ Register RCC_CFGR Bit ------------------*/
+/*------------------ 04. RCC_CFGR Bits ------------------*/
 #define RCC_CFGR_SW0  0
 #define RCC_CFGR_SW1  1
 #define RCC_CFGR_SWS0 2
 #define RCC_CFGR_SWS1 3
+
+/*------------------ 05. Field Values ------------------*/
+#define RCC_SW_HSI 0x0 /* 00 */
+#define RCC_SW_HSE 0x1 /* 01 */
+#define RCC_SW_PLL 0x2 /* 10 */
+
+/*------------------ 06. Config Options ------------------*/
+#define RCC_HSI 1
+#define RCC_HSE 2
+#define RCC_PLL 3
 
 #endif
