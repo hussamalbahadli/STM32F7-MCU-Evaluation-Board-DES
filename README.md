@@ -1,6 +1,6 @@
 # STM32F7-MCU-Evaluation-Board-DES
 
-Bare-metal drivers written from scratch for the **STM32F746ZG** on a **NUCLEO-F746ZG** board, following the same layered architecture and naming conventions I use in my AVR and STM32F103 repositories.
+Bare-metal drivers written from scratch for the **STM32F746ZG** on a **NUCLEO-F746ZG** board, following the same layered architecture and naming conventions I use in my [AVR](https://github.com/hussamalbahadli/AVR-MCU-Evaluation-Board-DES) and [STM32F103](https://github.com/hussamalbahadli/STM32-MCU-Evaluation-Board-DES) repositories.
 
 > Personal training repository. Every driver is written by hand from the Reference Manual (RM0385) — no HAL, no CubeMX-generated code.
 
@@ -40,7 +40,7 @@ Every driver consists of **four files**:
 | Driver | Status |
 |---|---|
 | LIB | Done |
-| RCC | Not started |
+| RCC | Done — HSI system clock, peripheral clock enable/disable |
 | GPIO | Not started |
 | STK | Not started |
 
