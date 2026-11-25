@@ -84,7 +84,9 @@ Keil MDK-ARM (uVision 5). Add `Driver/LIB`, `Driver/MCAL/*` and the example fold
 
 ## References
 
-- **RM0385** — Reference Manual (STM32F74x/75x)
-- **DS10916** — Datasheet (STM32F746ZG)
-- **UM1974** — Nucleo-144 board user manual
-- **PM0253** — Cortex-M7 Programming Manual
+Official ST documents (download from ST — not stored in this repository):
+
+- **RM0385** — Reference Manual (STM32F74x/75x) · **DS10916** — Datasheet (STM32F746ZG) · **PM0253** — Cortex-M7 Programming Manual → [STM32F746ZG documentation](https://www.st.com/en/microcontrollers-microprocessors/stm32f746zg.html#documentation)
+- **UM1974** — Nucleo-144 board user manual → [NUCLEO-F746ZG documentation](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html#documentation)
+
+My own notes on the Reference Manual: [Docs/RM0385_notes.md](Docs/RM0385_notes.md)

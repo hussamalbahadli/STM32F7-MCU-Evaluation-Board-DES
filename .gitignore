@@ -49,3 +49,5 @@ Thumbs.db
 #     *.c  *.h      source
 #     *.md          documentation
 # ==========================================================
+# ST documents are kept locally only (copyrighted)
+Docs/*.pdf
